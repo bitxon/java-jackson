@@ -11,10 +11,14 @@ import java.time.LocalDateTime;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SimpleTest {
+class JavaRecordTest {
 // ------------------------------ Configuration ---------------------------------------------------
 
-    private record Entity(Integer id, String fullName, LocalDateTime registration) {}
+    record Entity(
+        Integer id,
+        String fullName,
+        LocalDateTime registration
+    ) {}
 
     ObjectMapper objectMapper = JsonMapper.builder()
         .addModule(new JavaTimeModule())
@@ -42,7 +46,7 @@ class SimpleTest {
     @Test
     void javaToJson() throws Exception {
         // when
-        var result = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(ENTITY);
+        var result = objectMapper.writeValueAsString(ENTITY);
         // then
         assertThatJson(result).isEqualTo(JSON);
     }
@@ -54,8 +58,4 @@ class SimpleTest {
         // then
         assertThat(result).isEqualTo(ENTITY);
     }
-
-
-    // ------------------------------ Entities ----------------------------------------------
-
 }
