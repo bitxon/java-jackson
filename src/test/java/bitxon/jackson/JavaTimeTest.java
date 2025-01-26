@@ -8,26 +8,43 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.time.*;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JavaTimeTest {
+// ------------------------------ Configuration ---------------------------------------------------
     static final Clock CLOCK = Clock.fixed(Instant.parse("2024-03-25T10:29:17.878675Z"), ZoneId.systemDefault());
     ObjectMapper objectMapper = JsonMapper.builder()
         .addModule(new JavaTimeModule())
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         .build();
 
-    @Test
-    void play() {
-        System.out.println("Instant now          : " + Instant.now(CLOCK));
-        System.out.println("LocalDateTime now    : " + LocalDateTime.now(CLOCK));
-        System.out.println("OffsetDateTime now   : " + OffsetDateTime.now(CLOCK));
-        System.out.println("ZonedDateTime now    : " + ZonedDateTime.now(CLOCK));
-    }
+// ------------------------------ Play with Default Format ---------------------------------------------------
 
+    @Nested
+    class PrintDefaultFormat {
+        /**
+         * Instant now          : 2024-03-25T09:29:17.878675Z
+         * LocalDateTime now    : 2024-03-25T10:29:17.878675
+         * OffsetDateTime now   : 2024-03-25T10:29:17.878675+01:00
+         * ZonedDateTime now    : 2024-03-25T10:29:17.878675+01:00[Europe/Warsaw]
+         */
+        @Test
+        void play() {
+            System.out.println("Instant now          : " + Instant.now(CLOCK));
+            System.out.println("LocalDateTime now    : " + LocalDateTime.now(CLOCK));
+            System.out.println("OffsetDateTime now   : " + OffsetDateTime.now(CLOCK));
+            System.out.println("ZonedDateTime now    : " + ZonedDateTime.now(CLOCK));
+        }
+    }
 
 // ------------------------------ Instant No Format -----------------------------------------------
     @Nested
